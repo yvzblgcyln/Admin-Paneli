@@ -1,22 +1,9 @@
 import { Col, Row, Table } from "react-bootstrap";
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";
-import { BiEdit } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
 import SortableTableHead from "@/components/company-list/SortableTableHead";
 import { PaginationControl } from "react-bootstrap-pagination-control";
-
-const columns = [
-  { name: t("name"), sortable: true, type: "name", integer: false },
-  { name: t("mail"), sortable: true, type: "email", integer: false },
-  { name: t("user-role"), sortable: true, type: "role", integer: false },
-  { name: t("user-type"), sortable: true, type: "user_type", integer: false },
-  { name: t("phone"), sortable: true, type: "phone", integer: false },
-  { name: t("company"), sortable: true, type: "company", integer: false },
-  { name: t("team"), sortable: true, type: "team", integer: true },
-  { name: t("customer"), sortable: true, type: "customer", integer: false },
-  { name: t("status"), sortable: true, type: "status", integer: false },
-];
 
 const rows = [
   {
@@ -80,6 +67,18 @@ function CompanyDetails() {
   const [page, setPage] = useState(1);
   const pageLimit = 20;
   const [modules, setModules] = useState(modulList.filter((item) => compInfo.cloud_modules.includes(item.id)));
+
+  const columns = [
+    { name: t("name"), sortable: true, type: "name", integer: false },
+    { name: t("mail"), sortable: true, type: "email", integer: false },
+    { name: t("user-role"), sortable: true, type: "role", integer: false },
+    { name: t("user-type"), sortable: true, type: "user_type", integer: false },
+    { name: t("phone"), sortable: true, type: "phone", integer: false },
+    { name: t("company"), sortable: true, type: "company", integer: false },
+    { name: t("team"), sortable: true, type: "team", integer: true },
+    { name: t("customer"), sortable: true, type: "customer", integer: false },
+    { name: t("status"), sortable: true, type: "status", integer: false },
+  ];
 
   const sortDataBy = (byKey, isInteger, sortDir) => {
     let userData = [...filteredList];

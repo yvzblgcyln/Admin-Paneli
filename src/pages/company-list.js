@@ -11,17 +11,6 @@ import WarningModal from "@/components/elements/WarningModal";
 import { toast } from "react-toastify";
 import EditModal from "@/components/company-list/EditModal";
 
-const columns = [
-  { name: t("comp-name"), sortable: true, type: "name", integer: false },
-  { name: t("comp-mail"), sortable: true, type: "email", integer: false },
-  { name: t("membership-type"), sortable: true, type: "membership_type", integer: false },
-  { name: t("auth-name"), sortable: true, type: "related_person_name", integer: false },
-  { name: t("auth-mail"), sortable: true, type: "related_person_email", integer: false },
-  { name: t("active-user"), sortable: true, type: "active_user_count", integer: true },
-  { name: t("comp-lang"), sortable: true, type: "language", integer: false },
-  { name: "", sortable: false, type: "customer", integer: false },
-];
-
 const rows = [
   {
     id: 1,
@@ -79,6 +68,17 @@ export default function CompanyList() {
   const [selectedId, setSelectedId] = useState("");
   const [page, setPage] = useState(1);
   const pageLimit = 20;
+
+  const columns = [
+    { name: t("comp-name"), sortable: true, type: "name", integer: false },
+    { name: t("comp-mail"), sortable: true, type: "email", integer: false },
+    { name: t("membership-type"), sortable: true, type: "membership_type", integer: false },
+    { name: t("auth-name"), sortable: true, type: "related_person_name", integer: false },
+    { name: t("auth-mail"), sortable: true, type: "related_person_email", integer: false },
+    { name: t("active-user"), sortable: true, type: "active_user_count", integer: true },
+    { name: t("comp-lang"), sortable: true, type: "language", integer: false },
+    { name: "", sortable: false, type: "customer", integer: false },
+  ];
 
   const sortDataBy = (byKey, isInteger, sortDir) => {
     let userData = [...filteredList];
@@ -147,7 +147,7 @@ export default function CompanyList() {
         <SortableTableHead columns={columns} sortDataBy={sortDataBy} />
         <tbody>
           {filteredList.slice((page - 1) * pageLimit, page * pageLimit).map((row) => (
-            <tr onClick={() => window.open(`/company-details/${row.id}`, "_ blank")}>
+            <tr onClick={() => window.open(`/company-details/${row.id}`, "_blank")}>
               <td>{row.name}</td>
               <td>{row.email}</td>
               <td>
