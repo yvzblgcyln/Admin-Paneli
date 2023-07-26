@@ -6,25 +6,30 @@ import styles from "@/styles/layouts/Navbar.module.css";
 import { useRouter } from "next/router";
 import { Tooltip } from "react-tooltip";
 import { t } from "i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { setSideBarOpen } from "@/redux/GeneralSlice";
 
 function Navbar() {
+  const dispatch = useDispatch();
   const router = useRouter();
+  const { SideBarOpen } = useSelector((state) => state.general);
 
   const handleLogout = () => {
-    router.push("login");
+    router.push("/login");
   };
 
   return (
     <div className={styles["container"]}>
-      <Tooltip id="menu" />
+      <Tooltip id="menu" style={{ zIndex: 1000 }} />
       <Tooltip id="home" />
       <Tooltip id="logout" style={{ zIndex: 1 }} />
       <div className="d-flex" style={{ gap: 10 }}>
         <GiHamburgerMenu
           data-tooltip-id="menu"
-          data-tooltip-content={t("menu")}
+          data-tooltip-content={!SideBarOpen ? t("show-menu") : t("hide-menu")}
           size={30}
           style={{ cursor: "pointer", marginTop: 2 }}
+          onClick={() => dispatch(setSideBarOpen())}
         />
 
         <AiFillHome

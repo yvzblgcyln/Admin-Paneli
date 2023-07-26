@@ -139,7 +139,7 @@ export default function CompanyList() {
                 <IoIosSearch />
               </span>
             </div>
-            <input type="text" className="form-control" placeholder="Ara" onChange={handleSearch} />
+            <input type="text" className="form-control" placeholder={t("search")} onChange={handleSearch} />
           </div>
         </div>
       </row>
@@ -147,11 +147,16 @@ export default function CompanyList() {
         <SortableTableHead columns={columns} sortDataBy={sortDataBy} />
         <tbody>
           {filteredList.slice((page - 1) * pageLimit, page * pageLimit).map((row) => (
-            <tr>
+            <tr onClick={() => window.open(`/company-details/${row.id}`, "_ blank")}>
               <td>{row.name}</td>
               <td>{row.email}</td>
               <td>
-                {row.membership_type} {row.membership_type.includes("emo") && <span>({row.days} gün kaldı)</span>}
+                {row.membership_type}
+                {row.membership_type.includes("emo") && (
+                  <span>
+                    ({row.days} {t("days-left")})
+                  </span>
+                )}
               </td>
               <td>{row.related_person_name}</td>
               <td>{row.related_person_email}</td>
