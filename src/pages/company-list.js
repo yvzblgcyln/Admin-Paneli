@@ -147,8 +147,13 @@ export default function CompanyList() {
         <SortableTableHead columns={columns} sortDataBy={sortDataBy} />
         <tbody>
           {filteredList.slice((page - 1) * pageLimit, page * pageLimit).map((row) => (
-            <tr onClick={() => window.open(`/company-details/${row.id}`, "_blank")}>
-              <td>{row.name}</td>
+            <tr>
+              <td
+                onClick={() => window.open(`/company-details/${row.id}`, "_blank")}
+                style={{ cursor: "pointer", textDecoration: "underline" }}
+              >
+                {row.name}
+              </td>
               <td>{row.email}</td>
               <td>
                 {row.membership_type}
@@ -211,7 +216,7 @@ export default function CompanyList() {
                   size={25}
                   style={{ cursor: "pointer", marginTop: -4 }}
                   data-tooltip-id="premium"
-                  data-tooltip-content={t("premium")}
+                  data-tooltip-content={t("Premium")}
                   onClick={() => {
                     setPremiumModalOpen(true);
                     setSelectedId(row.id);

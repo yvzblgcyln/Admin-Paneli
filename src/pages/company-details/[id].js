@@ -192,8 +192,11 @@ function CompanyDetails() {
           <div className="d-flex flex-row">
             <label style={{ transform: "translateY(0)" }}>{t("module")}: </label>
             <div className="d-flex flex-row">
-              {modules?.map((modules) => (
-                <div>{modules.name}, </div>
+              {modules?.map((module, index) => (
+                <div key={index}>
+                  <span> {module.name}</span>
+                  {index + 1 !== modules.length && <span>, </span>}
+                </div>
               ))}
             </div>
           </div>
@@ -214,7 +217,7 @@ function CompanyDetails() {
           </div>
         </div>
       </row>
-      <Table striped bordered hover variant="light">
+      <Table striped bordered variant="light">
         <SortableTableHead columns={columns} sortDataBy={sortDataBy} />
         <tbody>
           {filteredList.slice((page - 1) * pageLimit, page * pageLimit).map((row) => (
