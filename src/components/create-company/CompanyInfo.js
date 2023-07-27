@@ -27,7 +27,6 @@ function CompanyInfo({ setActivePage, inputs, setInputs, setIsClickable }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(!inputs.name, !inputs?.days?.length);
     if (!inputs.name && !inputs.days && !inputs.email) {
       setIsValidEmail(inputs.email);
     } else if (isValidEmail) {

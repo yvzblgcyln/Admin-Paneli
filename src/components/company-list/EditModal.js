@@ -25,8 +25,6 @@ function EditModal({ modalOpen, setModalOpen, action, data }) {
     { id: 7, value: false, name: t("budget-management") },
   ]);
 
-  console.log(inputs);
-
   const handleClose = () => setModalOpen(false);
 
   const handleChange = (id) => {

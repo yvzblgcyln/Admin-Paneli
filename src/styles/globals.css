@@ -40,4 +40,16 @@ th {
 }
 td {
   font-size: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.row-responsive {
+  display: flex;
+  flex-direction: row;
+}
+@media (width < 700px) {
+  .row-responsive {
+    flex-direction: column;
+  }
 }

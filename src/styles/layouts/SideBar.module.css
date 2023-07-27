@@ -11,19 +11,26 @@
   z-index: 999;
   background-color: white;
 }
-/* 
+
 @media (width < 700px) {
   .container {
     position: absolute;
+    height: 250px;
+    border-bottom: 1px solid rgb(213, 213, 213);
   }
-} */
+}
+
+.user-area {
+  border-bottom: 1px solid rgb(213, 213, 213);
+  display: flex;
+  justify-content: space-between;
+}
 
 .user-container {
   display: flex;
   gap: 5px;
   align-items: center;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgb(213, 213, 213);
   min-width: 230px;
 }
 

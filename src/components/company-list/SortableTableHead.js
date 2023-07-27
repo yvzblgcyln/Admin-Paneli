@@ -41,16 +41,18 @@ const SortableColumn = ({ column, setToInitial, setSortType, sortDataBy }) => {
   };
 
   return (
-    <th key={column.type} style={{ cursor: "pointer" }} onClick={() => clickHandler()}>
-      {column.name}
+    <th key={column.type} style={{ cursor: "pointer", minWidth: "fit-content" }} onClick={() => clickHandler()}>
+      <span>{column.name}</span>
       &nbsp;
-      {sortDir == "" ? (
-        <BiSort style={{ transform: "translateY(-1px)" }} />
-      ) : sortDir == "asc" ? (
-        <BiSortUp style={{ transform: "translateY(-1px)" }} />
-      ) : (
-        <BiSortDown style={{ transform: "translateY(-1px)" }} />
-      )}
+      <span>
+        {sortDir == "" ? (
+          <BiSort style={{ transform: "translateY(-1px)" }} />
+        ) : sortDir == "asc" ? (
+          <BiSortUp style={{ transform: "translateY(-1px)" }} />
+        ) : (
+          <BiSortDown style={{ transform: "translateY(-1px)" }} />
+        )}
+      </span>
     </th>
   );
 };

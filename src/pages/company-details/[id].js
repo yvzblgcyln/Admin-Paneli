@@ -111,14 +111,14 @@ function CompanyDetails() {
     <div>
       <h3>{t("company-info")}</h3>
       <div style={{ background: "bisque", padding: 20, borderRadius: 8, marginBottom: 30 }}>
-        <Row className="mb-2">
-          <Col md={6}>
+        <Row>
+          <Col md={6} className="mb-2">
             <div>
               <label style={{ transform: "translateY(0)" }}>{t("comp-name")}: </label>
               <span> {compInfo.name}</span>
             </div>
           </Col>
-          <Col md={6}>
+          <Col md={6} className="mb-2">
             <div>
               <label style={{ transform: "translateY(0)" }}>{t("comp-mail")}: </label>
               <span> {compInfo.email}</span>
@@ -126,13 +126,13 @@ function CompanyDetails() {
           </Col>
         </Row>
         <Row className="mb-2">
-          <Col md={6}>
+          <Col md={6} className="mb-2">
             <div>
               <label style={{ transform: "translateY(0)" }}>{t("membership-type")}: </label>
               <span> {compInfo.membership_type}</span>
             </div>
           </Col>
-          <Col md={6}>
+          <Col md={6} className="mb-2">
             <div>
               <label style={{ transform: "translateY(0)" }}>{t("auth-name")}: </label>
               <span> {compInfo.related_person_name}</span>
@@ -140,13 +140,13 @@ function CompanyDetails() {
           </Col>
         </Row>
         <Row className="mb-2">
-          <Col md={6}>
+          <Col md={6} className="mb-2">
             <div>
               <label style={{ transform: "translateY(0)" }}>{t("active-user")}: </label>
               <span> {compInfo.related_person_email}</span>
             </div>
           </Col>
-          <Col md={6}>
+          <Col md={6} className="mb-2">
             <div>
               <label style={{ transform: "translateY(0)" }}>{t("comp-lang")}: </label>
               <span>
@@ -202,7 +202,7 @@ function CompanyDetails() {
           </div>
         </Row>
       </div>
-      <row className="d-flex justify-content-between">
+      <row className="d-flex justify-content-between row-responsive">
         <div className="col-lg-6 ">
           <h3>{t("user-list")}</h3>
         </div>
@@ -217,7 +217,7 @@ function CompanyDetails() {
           </div>
         </div>
       </row>
-      <Table striped bordered variant="light">
+      <Table striped bordered variant="light" responsive>
         <SortableTableHead columns={columns} sortDataBy={sortDataBy} />
         <tbody>
           {filteredList.slice((page - 1) * pageLimit, page * pageLimit).map((row) => (

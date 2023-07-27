@@ -128,7 +128,7 @@ export default function CompanyList() {
       />
       <Tooltip id="premium" />
       <Tooltip id="edit" />
-      <row className="d-flex justify-content-between">
+      <row className="d-flex justify-content-between row-responsive">
         <div className="col-lg-6 ">
           <h3>{t("company-list")}</h3>
         </div>
@@ -143,7 +143,7 @@ export default function CompanyList() {
           </div>
         </div>
       </row>
-      <Table striped bordered hover variant="light">
+      <Table striped bordered hover variant="light" responsive>
         <SortableTableHead columns={columns} sortDataBy={sortDataBy} />
         <tbody>
           {filteredList.slice((page - 1) * pageLimit, page * pageLimit).map((row) => (

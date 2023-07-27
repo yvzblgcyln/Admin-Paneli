@@ -54,7 +54,6 @@ function AuthorizedPerson({ setActivePage, inputs, setInputs, setIsClickable }) 
       <WarningModal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
-        setConfirm={setConfirm}
         text={t("approve-create-company")}
         action={submitAction}
       />

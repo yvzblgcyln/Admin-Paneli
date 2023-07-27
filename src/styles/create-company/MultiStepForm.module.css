@@ -33,6 +33,19 @@
   text-align: center;
 }
 
+@media (width <700px) {
+  .text-cont span {
+    top: -30px;
+    width: 105px;
+    font-size: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 .icon-cont {
   display: flex;
   align-items: center;
