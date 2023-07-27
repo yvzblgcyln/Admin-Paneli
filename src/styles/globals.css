@@ -53,3 +53,20 @@ td {
     flex-direction: column;
   }
 }
+
+.empty-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96%;
+  position: absolute;
+  margin-top: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid black;
+}
+
+@media (width < 700px) {
+  .empty-data {
+    width: 94%;
+  }
+}

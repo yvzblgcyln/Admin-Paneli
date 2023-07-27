@@ -27,20 +27,21 @@ function CompanyInfo({ setActivePage, inputs, setInputs, setIsClickable }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!inputs.name && !inputs.days && !inputs.email) {
-      setIsValidEmail(inputs.email);
+
+    !inputs.name && setIsValidName(inputs.name);
+    !inputs.email && setIsValidEmail(inputs.email);
+    if (inputs.membership_type === "demo") !inputs.days && setIsValidDemo(inputs.days);
+
+    if (!inputs.name) {
+      toast.warning(t("fill-requierd-fields"));
+    } else if (!inputs.days && inputs.membership_type === "demo") {
+      toast.warning(t("fill-requierd-fields"));
+    } else if (!inputs.email || !isValidEmail) {
+      toast.warning(t("make-sure-mail"));
     } else if (isValidEmail) {
       console.log(inputs);
       setIsClickable((prev) => ({ ...prev, page2: true }));
       setActivePage((prev) => prev + 1);
-    }
-
-    if (!inputs.name || !inputs.days) {
-      toast.warning(t("fill-requierd-fields"));
-      setIsValidName(inputs.name);
-      setIsValidDemo(inputs.days);
-    } else if (!inputs.email || !isValidEmail) {
-      toast.warning(t("make-sure-mail"));
     }
   };
 

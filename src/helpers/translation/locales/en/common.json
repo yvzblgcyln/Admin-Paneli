@@ -61,5 +61,9 @@
   "status": "Status",
   "search": "Search",
   "user-list": "User List",
-  "module": "Module"
+  "module": "Module",
+  "welcome": "Welcome to Coploud Admin Panel.",
+  "tab-home": "Home Page",
+  "tab-create-company": "Create Company",
+  "no-result": "No matching record found."
 }

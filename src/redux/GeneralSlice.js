@@ -7,8 +7,11 @@ export const GeneralSlice = createSlice({
     setSideBarOpen: (state) => {
       state.SideBarOpen = !state.SideBarOpen;
     },
+    setSideBarClose: (state) => {
+      state.SideBarOpen = false;
+    },
   },
 });
 
-export const { setSideBarOpen } = GeneralSlice.actions;
+export const { setSideBarOpen, setSideBarClose } = GeneralSlice.actions;
 export default GeneralSlice.reducer;

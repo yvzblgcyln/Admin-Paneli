@@ -61,5 +61,9 @@
   "status": "Durum",
   "search": "Ara",
   "user-list": "Kullanıcı Listesi",
-  "module": "Modül"
+  "module": "Modül",
+  "welcome": "Coploud Admin Paneline Hoşgeldiniz.",
+  "tab-home": "Anasayfa",
+  "tab-create-company": "Şirket Oluştur",
+  "no-result": "Aramanıza uygun kayıt bulunamadı."
 }
