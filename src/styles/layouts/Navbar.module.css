@@ -1,6 +1,6 @@
 .container {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid rgb(213, 213, 213);
+  display: flex;
+  justify-content: space-between;
+  padding: 11.5px;
+  border-bottom: 1px solid rgb(213, 213, 213);
 }
