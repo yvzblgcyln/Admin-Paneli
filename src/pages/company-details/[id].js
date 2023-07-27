@@ -1,10 +1,14 @@
-import { Col, Row, Table } from "react-bootstrap";
+import { Col, Form, Row, Table } from "react-bootstrap";
 import { t } from "i18next";
 import React, { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import SortableTableHead from "@/components/company-list/SortableTableHead";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 import Head from "next/head";
+import { BiEdit } from "react-icons/bi";
+import { Tooltip } from "react-tooltip";
+import EditModal from "@/components/company-list/EditModal";
+import WarningModal from "@/components/elements/WarningModal";
 
 const rows = [
   {
@@ -12,11 +16,11 @@ const rows = [
     customer: "atest",
     email: "baaa@gmail.com",
     id: 88,
-    is_active: true,
+    is_active: false,
     name: "baaa deneme",
     phone: "123 1345",
     role: "Kullan\u0131c\u0131",
-    status: "Aktif",
+    status: "Pasif",
     team: "Yaz\u0131l\u0131m Geli\u015ftirme",
     user_type: "initial",
     user_type_id: 1,
@@ -27,7 +31,7 @@ const rows = [
     company: "Fiz Bili\u015fim",
     customer: "testt",
     email: "aaa@gmail.com",
-    id: 88,
+    id: 89,
     is_active: true,
     name: "aaa deneme",
     phone: "4562356",
@@ -68,6 +72,9 @@ function CompanyDetails() {
   const [page, setPage] = useState(1);
   const pageLimit = 20;
   const [modules, setModules] = useState(modulList.filter((item) => compInfo.cloud_modules.includes(item.id)));
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
+  const [warningModal, setWarningModal] = useState(false);
 
   const columns = [
     { name: t("name"), sortable: true, type: "name", integer: false },
@@ -108,50 +115,67 @@ function CompanyDetails() {
     setFilteredList(rows.filter(({ name }) => name.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase())));
   };
 
+  const handleEditModule = () => {};
+
+  const submitAction = () => {};
+
   return (
     <>
       <Head>
         <title>{t("company-info") + ` | ${compInfo.name}`}</title>
       </Head>
       <div>
+        <Tooltip id="edit" style={{ zIndex: 1 }} />
+        <EditModal
+          modalOpen={editModalOpen}
+          setModalOpen={setEditModalOpen}
+          action={handleEditModule}
+          data={selectedId}
+        />
+        <WarningModal
+          modalOpen={warningModal}
+          setModalOpen={setWarningModal}
+          text={t("approve-activate")}
+          action={submitAction}
+        />
         <h3>{t("company-info")}</h3>
         <div style={{ background: "bisque", padding: 20, borderRadius: 8, marginBottom: 30 }}>
           <Row>
-            <Col md={6} className="mb-2">
+            <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
                 <label style={{ transform: "translateY(0)" }}>{t("comp-name")}: </label>
                 <span> {compInfo.name}</span>
               </div>
             </Col>
-            <Col md={6} className="mb-2">
+            <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
                 <label style={{ transform: "translateY(0)" }}>{t("comp-mail")}: </label>
                 <span> {compInfo.email}</span>
               </div>
             </Col>
-          </Row>
-          <Row className="mb-2">
-            <Col md={6} className="mb-2">
-              <div>
-                <label style={{ transform: "translateY(0)" }}>{t("membership-type")}: </label>
-                <span> {compInfo.membership_type}</span>
-              </div>
-            </Col>
-            <Col md={6} className="mb-2">
+            <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
                 <label style={{ transform: "translateY(0)" }}>{t("auth-name")}: </label>
                 <span> {compInfo.related_person_name}</span>
               </div>
             </Col>
-          </Row>
-          <Row className="mb-2">
-            <Col md={6} className="mb-2">
+            <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
-                <label style={{ transform: "translateY(0)" }}>{t("active-user")}: </label>
+                <label style={{ transform: "translateY(0)" }}>{t("auth-mail")}: </label>
                 <span> {compInfo.related_person_email}</span>
               </div>
             </Col>
-            <Col md={6} className="mb-2">
+            <Col xl={3} lg={4} md={6} className="mb-2">
+              <div>
+                <label style={{ transform: "translateY(0)" }}>{t("membership-type")}: </label>
+                <span> {compInfo.membership_type}</span>
+              </div>
+            </Col>
+            <Col xl={3} lg={4} md={6} className="mb-2">
+              <label style={{ transform: "translateY(0)" }}>{t("active-user")}: </label>
+              <span> {compInfo.active_user_count}</span>
+            </Col>
+            <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
                 <label style={{ transform: "translateY(0)" }}>{t("comp-lang")}: </label>
                 <span>
@@ -160,7 +184,7 @@ function CompanyDetails() {
                       xmlns="http://www.w3.org/2000/svg"
                       width="18"
                       height="18"
-                      class="rounded mr-2"
+                      className="rounded mr-2"
                       id="flag-icon-css-tr"
                       viewBox="0 0 512 512"
                       style={{ marginBottom: 3, marginLeft: 5 }}
@@ -183,7 +207,7 @@ function CompanyDetails() {
                     </svg>
                   ) : (
                     <img
-                      class="rounded mr-2"
+                      className="rounded mr-2"
                       src="https://cdn.countryflags.com/thumbs/united-kingdom/flag-square-250.png"
                       alt="uk-flag"
                       style={{ width: 18, height: 18, marginBottom: 3, marginLeft: 5 }}
@@ -192,20 +216,30 @@ function CompanyDetails() {
                 </span>
               </div>
             </Col>
-          </Row>
-          <Row>
-            <div className="d-flex flex-row">
-              <label style={{ transform: "translateY(0)" }}>{t("module")}: </label>
-              <div className="d-flex flex-row">
+            <Col xl={3} lg={4} md={6}>
+              <label style={{ transform: "translateY(0)" }}>
+                {t("module")}:{" "}
+                <BiEdit
+                  size={25}
+                  style={{ cursor: "pointer", transform: "translate(1px,-1px)" }}
+                  data-tooltip-id="edit"
+                  data-tooltip-content={t("edit-module")}
+                  onClick={() => {
+                    setSelectedId(1);
+                    setEditModalOpen(true);
+                  }}
+                />
+              </label>
+              <ul>
                 {modules?.map((module, index) => (
-                  <div key={index}>
+                  <li key={index}>
                     <span> {module.name}</span>
-                    {index + 1 !== modules.length && <span>, </span>}
-                  </div>
+                  </li>
                 ))}
-              </div>
-            </div>
+              </ul>
+            </Col>
           </Row>
+          <div className="d-flex flex-row"></div>
         </div>
         <row className="d-flex justify-content-between row-responsive">
           <div className="col-lg-6 ">
@@ -228,7 +262,7 @@ function CompanyDetails() {
           {filteredList.length ? (
             <tbody>
               {filteredList.slice((page - 1) * pageLimit, page * pageLimit).map((row) => (
-                <tr>
+                <tr key={row.id}>
                   <td>{row.name}</td>
                   <td>{row.email}</td>
                   <td>{row.role}</td>
@@ -237,7 +271,17 @@ function CompanyDetails() {
                   <td>{row.company}</td>
                   <td>{row.team}</td>
                   <td>{row.customer}</td>
-                  <td>{row.status}</td>
+                  <td className="d-flex">
+                    <Form.Check
+                      type="switch"
+                      checked={row.is_active}
+                      isValid={row.is_active && true}
+                      isInvalid={!row.is_active && true}
+                      onClick={() => console.log(setWarningModal(true))}
+                      readOnly
+                    />
+                    <span>{row.status}</span>
+                  </td>
                 </tr>
               ))}
             </tbody>

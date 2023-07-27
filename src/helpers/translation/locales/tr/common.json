@@ -46,7 +46,9 @@
   "upgrade-premium": "Üyelik paketiniz Premium’a yükselmiştir.",
   "edit-company": "Şirket Bilgilerini Düzenle",
   "edit-module": "Modülü Düzenle",
+  "module-list": "Firmanın Yetkili Olduğu Modüller",
   "succes-edit-module": "Modül düzenleme işlemi başarıyla tamamlandı.",
+  "approve-module": "Firmanın yetkili olduğu modüllerde değişiklik yapıcalak, onaylıyor musunuz?",
   "active-user": "Aktif Kullanıcı Sayısı",
   "change-lang": "Dil Değiştir",
   "days-left": "Gün Kaldı",
@@ -65,5 +67,6 @@
   "welcome": "Coploud Admin Paneline Hoşgeldiniz.",
   "tab-home": "Anasayfa",
   "tab-create-company": "Şirket Oluştur",
-  "no-result": "Aramanıza uygun kayıt bulunamadı."
+  "no-result": "Aramanıza uygun kayıt bulunamadı.",
+  "approve-activate": "Kullanıcı durumunu değiştirmek istediğinize emin misiniz?"
 }

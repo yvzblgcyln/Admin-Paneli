@@ -16,7 +16,7 @@ a {
 }
 
 .main-page-layout {
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 121px);
   padding: 30px;
   color: rgb(86, 86, 86);
 }

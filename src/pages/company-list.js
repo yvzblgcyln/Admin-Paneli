@@ -73,7 +73,7 @@ export default function CompanyList() {
   const columns = [
     { name: t("comp-name"), sortable: true, type: "name", integer: false },
     { name: t("comp-mail"), sortable: true, type: "email", integer: false },
-    { name: t("membership-type"), sortable: true, type: "membership_type", integer: false },
+    { name: t("membership-type"), sortable: true, type: "membership_type", integer: true },
     { name: t("auth-name"), sortable: true, type: "related_person_name", integer: false },
     { name: t("auth-mail"), sortable: true, type: "related_person_email", integer: false },
     { name: t("active-user"), sortable: true, type: "active_user_count", integer: true },
@@ -83,7 +83,19 @@ export default function CompanyList() {
 
   const sortDataBy = (byKey, isInteger, sortDir) => {
     let userData = [...filteredList];
-    if (!isInteger) {
+    let emptyArr = [];
+
+    if (byKey === "membership_type") {
+      emptyArr = userData.filter((data) => !data.days);
+      userData = userData
+        .filter((data) => data.days)
+        .sort(function (a, b) {
+          if (sortDir === "desc") return a["days"] - b["days"];
+          else return b["days"] - a["days"];
+        });
+      setFilteredList(sortDir === "desc" ? userData.concat(emptyArr) : emptyArr.concat(userData));
+      return;
+    } else if (!isInteger) {
       userData = userData.sort(function (a, b) {
         let x = a[byKey].toLowerCase();
         let y = b[byKey].toLowerCase();
@@ -162,7 +174,7 @@ export default function CompanyList() {
                   </td>
                   <td>{row.email}</td>
                   <td>
-                    {row.membership_type}
+                    {row.membership_type}&nbsp;
                     {row.membership_type.includes("emo") && (
                       <span>
                         ({row.days} {t("days-left")})
@@ -218,16 +230,18 @@ export default function CompanyList() {
                         setEditModalOpen(true);
                       }}
                     />
-                    <MdWorkspacePremium
-                      size={25}
-                      style={{ cursor: "pointer", marginTop: -4 }}
-                      data-tooltip-id="premium"
-                      data-tooltip-content={t("Premium")}
-                      onClick={() => {
-                        setPremiumModalOpen(true);
-                        setSelectedId(row.id);
-                      }}
-                    />
+                    {row.membership_type.includes("emo") && (
+                      <MdWorkspacePremium
+                        size={25}
+                        style={{ cursor: "pointer", marginTop: -4 }}
+                        data-tooltip-id="premium"
+                        data-tooltip-content={t("Premium")}
+                        onClick={() => {
+                          setPremiumModalOpen(true);
+                          setSelectedId(row.id);
+                        }}
+                      />
+                    )}
                   </td>
                 </tr>
               ))}
@@ -244,7 +258,7 @@ export default function CompanyList() {
           changePage={(page) => setPage(page)}
           ellipsis={1}
         />
-      </div>{" "}
+      </div>
     </>
   );
 }

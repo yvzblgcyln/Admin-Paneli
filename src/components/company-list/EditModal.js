@@ -7,6 +7,7 @@ import WarningModal from "../elements/WarningModal";
 
 function EditModal({ modalOpen, setModalOpen, action, data }) {
   const [inputs, setInputs] = useState({ cloud_modules: [1, 2, 6] });
+  const [warningModal, setWarningModal] = useState(false);
 
   //sayfa değişince seçili kutular gelmesi için
   useEffect(() => {
@@ -51,8 +52,6 @@ function EditModal({ modalOpen, setModalOpen, action, data }) {
     }
   };
 
-  const [warningModal, setWarningModal] = useState(false);
-
   const submitAction = () => {
     toast.success(t("succes-edit-module"));
     console.log(inputs);
@@ -65,7 +64,7 @@ function EditModal({ modalOpen, setModalOpen, action, data }) {
       <WarningModal
         modalOpen={warningModal}
         setModalOpen={setWarningModal}
-        text={t("approve-premium")}
+        text={t("approve-module")}
         action={submitAction}
       />
       <Modal.Body>
@@ -73,7 +72,7 @@ function EditModal({ modalOpen, setModalOpen, action, data }) {
           className="d-flex flex-column justify-content-center align-items-center"
           style={{ gap: 25, padding: "25px 20px 10px 20px" }}
         >
-          <h3 style={{ textAlign: "center" }}>{t("edit-module")}</h3>
+          <h3 style={{ textAlign: "center" }}>{t("module-list")}</h3>
           <form className="d-flex flex-column" onSubmit={handleSubmit} style={{ width: "100%" }}>
             {checkOptions.map((option) => (
               <div class="form-check form-check-inline" key={option.id}>
