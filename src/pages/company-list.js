@@ -165,7 +165,7 @@ export default function CompanyList() {
           {filteredList.length ? (
             <tbody>
               {filteredList.slice((page - 1) * pageLimit, page * pageLimit).map((row) => (
-                <tr>
+                <tr key={row.id}>
                   <td
                     onClick={() => window.open(`/company-details/${row.id}`, "_blank")}
                     style={{ cursor: "pointer", textDecoration: "underline" }}
