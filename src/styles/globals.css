@@ -70,3 +70,36 @@ td {
     width: 94%;
   }
 }
+
+@keyframes rotation {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(359deg);
+	}
+}
+
+.preloader {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #f4f6f959;
+  height: 100vh;
+  width: 100%;
+  transition: height .2s linear;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+}
+
+.preloader img {
+  vertical-align: middle;
+  border-style: none;
+}
+
+.rotate {
+	animation: rotation 0.78s infinite linear;
+}

@@ -5,11 +5,19 @@ import ModulePick from "@/components/create-company/ModulePick";
 import MultiStepForm from "@/components/create-company/MultiStepForm";
 import Head from "next/head";
 import { t } from "i18next";
+import { checkLogin } from "@/actions/LoginActions";
+import { getCloudModules } from "@/actions/CloudActions";
 
-export default function CreateCompany() {
-  const [inputs, setInputs] = useState({ membership_type: "demo", language: "tr" });
+export default function CreateCompany({ modules, token }) {
+  const [inputs, setInputs] = useState({
+    membership_type: "demo",
+    language: "tr",
+  });
   const [activePage, setActivePage] = useState(1);
-  const [isClickable, setIsClickable] = useState({ page2: false, page3: false });
+  const [isClickable, setIsClickable] = useState({
+    page2: false,
+    page3: false,
+  });
 
   return (
     <>
@@ -17,7 +25,11 @@ export default function CreateCompany() {
         <title>{t("tab-create-company")}</title>
       </Head>
       <div>
-        <MultiStepForm activePage={activePage} setActivePage={setActivePage} isClickable={isClickable} />
+        <MultiStepForm
+          activePage={activePage}
+          setActivePage={setActivePage}
+          isClickable={isClickable}
+        />
         {activePage === 1 ? (
           <CompanyInfo
             setActivePage={setActivePage}
@@ -32,6 +44,7 @@ export default function CreateCompany() {
             setInputs={setInputs}
             setIsClickable={setIsClickable}
             isClickable={isClickable}
+            modules={modules}
           />
         ) : (
           <AuthorizedPerson
@@ -40,9 +53,30 @@ export default function CreateCompany() {
             setInputs={setInputs}
             setIsClickable={setIsClickable}
             isClickable={isClickable}
+            token={token}
           />
         )}
       </div>
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const token = req.cookies.token;
+  const isLogged = await checkLogin(token);
+  if (!isLogged) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  const modules = await getCloudModules(token);
+  return {
+    props: {
+      modules,
+      token,
+    },
+  };
 }

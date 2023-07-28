@@ -42,7 +42,9 @@
   "make-sure-mail": "Please make sure the email format is correct.",
   "choose-at-least-one": "Please choose at least 1 option.",
   "approve-create-company": "Do you approve the process of creating a company?",
-  "succes-create-company": "Company creation process has been successfully completed.",
+  "success-create-company": "Company creation process has been successfully completed. You are being redirected to the company list...",
+  "cloud-email-exist-error": "There is already a Cloud account registered with this e-mail address.",
+  "user-exist-error": "There is a registered user account with the authorized e-mail address you entered.",
   "approve-premium": "Do you confirm the upgrade to Premium membership package?",
   "upgrade-premium": "Your membership package has been upgraded to Premium.",
   "edit-company": "Edit Company Infos",
@@ -69,5 +71,7 @@
   "tab-home": "Home Page",
   "tab-create-company": "Create Company",
   "no-result": "No matching record found.",
-  "approve-activate": "Do you confirm that you want to change the user's status?"
+  "approve-activate": "Do you confirm that you want to change the user's status?",
+  "login-error": "Your username or password is incorrect.",
+  "unexpected-error": "An unexpected error has occurred."
 }

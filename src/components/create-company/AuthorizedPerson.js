@@ -5,12 +5,21 @@ import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import WarningModal from "../elements/WarningModal";
 import { useRouter } from "next/router";
+import Loading from "../elements/Loading";
+import { createCloudCompany } from "@/actions/CloudActions";
 
-function AuthorizedPerson({ setActivePage, inputs, setInputs, setIsClickable }) {
+function AuthorizedPerson({
+  setActivePage,
+  inputs,
+  setInputs,
+  setIsClickable,
+  token,
+}) {
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isValidName, setIsValidName] = useState(true);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleEmailChange = (e) => {
@@ -42,15 +51,28 @@ function AuthorizedPerson({ setActivePage, inputs, setInputs, setIsClickable }) 
     }
   };
 
-  const submitAction = () => {
-    console.log(inputs);
-    setActivePage((prev) => prev + 1);
-    toast.success(t("succes-create-company"));
-    router.push("/");
+  const submitAction = async () => {
+    setLoading(true);
+    let response = await createCloudCompany(token, inputs);
+    setLoading(false);
+    if (response.status === "success") {
+      setActivePage((prev) => prev + 1);
+      toast.success(t("success-create-company"));
+      setTimeout(() => {
+        router.push("/company-list");
+      }, 3000);
+    } else if (response.status === "cloud_email_exist") {
+      toast.error(t("cloud-email-exist-error"));
+    } else if (response.status === "user_exist") {
+      toast.error(t("user-exist-error"));
+    } else {
+      toast.error(t("unexpected-error"));
+    }
   };
 
   return (
     <div className={styles["container"]}>
+      {loading ? <Loading /> : null}
       <WarningModal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
@@ -58,7 +80,9 @@ function AuthorizedPerson({ setActivePage, inputs, setInputs, setIsClickable }) 
         action={submitAction}
       />
       <div style={{ maxWidth: 600, width: "100%", marginTop: 80 }}>
-        <h3 style={{ textAlign: "center", marginBottom: 20 }}>{t("auth-person")}</h3>
+        <h3 style={{ textAlign: "center", marginBottom: 20 }}>
+          {t("auth-person")}
+        </h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">{t("auth-name")}</label>

@@ -9,6 +9,7 @@ import { BiEdit } from "react-icons/bi";
 import { Tooltip } from "react-tooltip";
 import EditModal from "@/components/company-list/EditModal";
 import WarningModal from "@/components/elements/WarningModal";
+import { checkLogin } from "@/actions/LoginActions";
 
 const rows = [
   {
@@ -71,7 +72,9 @@ function CompanyDetails() {
   const [filteredList, setFilteredList] = useState(rows);
   const [page, setPage] = useState(1);
   const pageLimit = 20;
-  const [modules, setModules] = useState(modulList.filter((item) => compInfo.cloud_modules.includes(item.id)));
+  const [modules, setModules] = useState(
+    modulList.filter((item) => compInfo.cloud_modules.includes(item.id))
+  );
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState("");
   const [warningModal, setWarningModal] = useState(false);
@@ -112,7 +115,11 @@ function CompanyDetails() {
   };
 
   const handleSearch = (e) => {
-    setFilteredList(rows.filter(({ name }) => name.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase())));
+    setFilteredList(
+      rows.filter(({ name }) =>
+        name.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase())
+      )
+    );
   };
 
   const handleEditModule = () => {};
@@ -139,45 +146,66 @@ function CompanyDetails() {
           action={submitAction}
         />
         <h3>{t("company-info")}</h3>
-        <div style={{ background: "bisque", padding: 20, borderRadius: 8, marginBottom: 30 }}>
+        <div
+          style={{
+            background: "bisque",
+            padding: 20,
+            borderRadius: 8,
+            marginBottom: 30,
+          }}
+        >
           <Row>
             <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
-                <label style={{ transform: "translateY(0)" }}>{t("comp-name")}: </label>
+                <label style={{ transform: "translateY(0)" }}>
+                  {t("comp-name")}:{" "}
+                </label>
                 <span> {compInfo.name}</span>
               </div>
             </Col>
             <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
-                <label style={{ transform: "translateY(0)" }}>{t("comp-mail")}: </label>
+                <label style={{ transform: "translateY(0)" }}>
+                  {t("comp-mail")}:{" "}
+                </label>
                 <span> {compInfo.email}</span>
               </div>
             </Col>
             <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
-                <label style={{ transform: "translateY(0)" }}>{t("auth-name")}: </label>
+                <label style={{ transform: "translateY(0)" }}>
+                  {t("auth-name")}:{" "}
+                </label>
                 <span> {compInfo.related_person_name}</span>
               </div>
             </Col>
             <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
-                <label style={{ transform: "translateY(0)" }}>{t("auth-mail")}: </label>
+                <label style={{ transform: "translateY(0)" }}>
+                  {t("auth-mail")}:{" "}
+                </label>
                 <span> {compInfo.related_person_email}</span>
               </div>
             </Col>
             <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
-                <label style={{ transform: "translateY(0)" }}>{t("membership-type")}: </label>
+                <label style={{ transform: "translateY(0)" }}>
+                  {t("membership-type")}:{" "}
+                </label>
                 <span> {compInfo.membership_type}</span>
               </div>
             </Col>
             <Col xl={3} lg={4} md={6} className="mb-2">
-              <label style={{ transform: "translateY(0)" }}>{t("active-user")}: </label>
+              <label style={{ transform: "translateY(0)" }}>
+                {t("active-user")}:{" "}
+              </label>
               <span> {compInfo.active_user_count}</span>
             </Col>
             <Col xl={3} lg={4} md={6} className="mb-2">
               <div>
-                <label style={{ transform: "translateY(0)" }}>{t("comp-lang")}: </label>
+                <label style={{ transform: "translateY(0)" }}>
+                  {t("comp-lang")}:{" "}
+                </label>
                 <span>
                   {compInfo.language === "tr" ? (
                     <svg
@@ -210,7 +238,12 @@ function CompanyDetails() {
                       className="rounded mr-2"
                       src="https://cdn.countryflags.com/thumbs/united-kingdom/flag-square-250.png"
                       alt="uk-flag"
-                      style={{ width: 18, height: 18, marginBottom: 3, marginLeft: 5 }}
+                      style={{
+                        width: 18,
+                        height: 18,
+                        marginBottom: 3,
+                        marginLeft: 5,
+                      }}
                     ></img>
                   )}
                 </span>
@@ -221,7 +254,10 @@ function CompanyDetails() {
                 {t("module")}:{" "}
                 <BiEdit
                   size={25}
-                  style={{ cursor: "pointer", transform: "translate(1px,-1px)" }}
+                  style={{
+                    cursor: "pointer",
+                    transform: "translate(1px,-1px)",
+                  }}
                   data-tooltip-id="edit"
                   data-tooltip-content={t("edit-module")}
                   onClick={() => {
@@ -252,7 +288,12 @@ function CompanyDetails() {
                   <IoIosSearch />
                 </span>
               </div>
-              <input type="text" className="form-control" placeholder={t("search")} onChange={handleSearch} />
+              <input
+                type="text"
+                className="form-control"
+                placeholder={t("search")}
+                onChange={handleSearch}
+              />
             </div>
           </div>
         </row>
@@ -261,29 +302,31 @@ function CompanyDetails() {
           <SortableTableHead columns={columns} sortDataBy={sortDataBy} />
           {filteredList.length ? (
             <tbody>
-              {filteredList.slice((page - 1) * pageLimit, page * pageLimit).map((row) => (
-                <tr key={row.id}>
-                  <td>{row.name}</td>
-                  <td>{row.email}</td>
-                  <td>{row.role}</td>
-                  <td>{row.user_type}</td>
-                  <td>{row.phone}</td>
-                  <td>{row.company}</td>
-                  <td>{row.team}</td>
-                  <td>{row.customer}</td>
-                  <td className="d-flex">
-                    <Form.Check
-                      type="switch"
-                      checked={row.is_active}
-                      isValid={row.is_active && true}
-                      isInvalid={!row.is_active && true}
-                      onClick={() => console.log(setWarningModal(true))}
-                      readOnly
-                    />
-                    <span>{row.status}</span>
-                  </td>
-                </tr>
-              ))}
+              {filteredList
+                .slice((page - 1) * pageLimit, page * pageLimit)
+                .map((row) => (
+                  <tr key={row.id}>
+                    <td>{row.name}</td>
+                    <td>{row.email}</td>
+                    <td>{row.role}</td>
+                    <td>{row.user_type}</td>
+                    <td>{row.phone}</td>
+                    <td>{row.company}</td>
+                    <td>{row.team}</td>
+                    <td>{row.customer}</td>
+                    <td className="d-flex">
+                      <Form.Check
+                        type="switch"
+                        checked={row.is_active}
+                        isValid={row.is_active && true}
+                        isInvalid={!row.is_active && true}
+                        onClick={() => console.log(setWarningModal(true))}
+                        readOnly
+                      />
+                      <span>{row.status}</span>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           ) : (
             <div className="empty-data">{t("no-result")}</div>
@@ -304,3 +347,19 @@ function CompanyDetails() {
 }
 
 export default CompanyDetails;
+
+export async function getServerSideProps({ req }) {
+  const token = req.cookies.token;
+  const isLogged = await checkLogin(token);
+  if (!isLogged) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

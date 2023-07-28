@@ -42,7 +42,9 @@
   "make-sure-mail": "Lütfen e-posta formatının doğru olduğundan emin olun.",
   "choose-at-least-one": "Lütfen en az 1 seçenek işaretleyin.",
   "approve-create-company": "Şirket oluşturma işlemini onaylıyor musunuz?",
-  "succes-create-company": "Şirket oluşturma işlemi başarıyla tamamlandı.",
+  "success-create-company": "Şirket oluşturma işlemi başarıyla tamamlandı. Şirket listesine yönlendiriliyorsunuz...",
+  "cloud-email-exist-error": "Bu mail adresiyle kayıtlı Cloud hesabı zaten bulunmaktadır.",
+  "user-exist-error": "Girdiğiniz yetkili mail adresi ile kayıtlı bir kullanıcı hesabı bulunmaktadır.",
   "approve-premium": "Üyelik paketi Premium’a yükseltilecek, onaylıyor musunuz?",
   "upgrade-premium": "Üyelik paketiniz Premium’a yükselmiştir.",
   "edit-company": "Şirket Bilgilerini Düzenle",
@@ -69,5 +71,7 @@
   "tab-home": "Anasayfa",
   "tab-create-company": "Şirket Oluştur",
   "no-result": "Aramanıza uygun kayıt bulunamadı.",
-  "approve-activate": "Kullanıcı durumunu değiştirmek istediğinize emin misiniz?"
+  "approve-activate": "Kullanıcı durumunu değiştirmek istediğinize emin misiniz?",
+  "login-error": "Kullanıcı adı veya parolanız hatalı.",
+  "unexpected-error": "Beklenmedik bir hata oluştu."
 }
