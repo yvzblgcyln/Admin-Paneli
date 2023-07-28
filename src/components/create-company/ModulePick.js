@@ -54,7 +54,7 @@ function ModulePick({ setActivePage, inputs, setInputs, setIsClickable }) {
         <h3 style={{ textAlign: "center", marginBottom: 20 }}>{t("pick-module")}</h3>
         <form onSubmit={handleSubmit} className="d-flex flex-column">
           {checkOptions.map((option) => (
-            <div class="form-check form-check-inline" key={option.id}>
+            <div className="form-check form-check-inline" key={option.id}>
               <input
                 className="form-check-input"
                 type="checkbox"

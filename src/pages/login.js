@@ -20,7 +20,7 @@ export default function Login() {
       <div className={styles["login-container"]}>
         <h3>{t("login-screen")}</h3>
         <form onSubmit={handleLogin}>
-          <div class="mb-3">
+          <div className="mb-3">
             <label className="form-label">{t("username")}</label>
             <input
               className="form-control"

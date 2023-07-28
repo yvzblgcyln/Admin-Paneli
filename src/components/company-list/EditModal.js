@@ -75,7 +75,7 @@ function EditModal({ modalOpen, setModalOpen, action, data }) {
           <h3 style={{ textAlign: "center" }}>{t("module-list")}</h3>
           <form className="d-flex flex-column" onSubmit={handleSubmit} style={{ width: "100%" }}>
             {checkOptions.map((option) => (
-              <div class="form-check form-check-inline" key={option.id}>
+              <div className="form-check form-check-inline" key={option.id}>
                 <input
                   className="form-check-input"
                   type="checkbox"

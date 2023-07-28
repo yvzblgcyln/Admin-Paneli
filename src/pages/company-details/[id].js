@@ -189,7 +189,7 @@ function CompanyDetails() {
                       viewBox="0 0 512 512"
                       style={{ marginBottom: 3, marginLeft: 5 }}
                     >
-                      <g fill-rule="evenodd">
+                      <g fillRule="evenodd">
                         <path fill="#e30a17" d="M0 0h512v512H0z"></path>
                         <path
                           fill="#fff"

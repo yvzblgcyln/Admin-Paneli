@@ -74,7 +74,7 @@ function CompanyInfo({ setActivePage, inputs, setInputs, setIsClickable }) {
               name="language"
               value={inputs?.language}
               id="inputState"
-              class="form-select"
+              className="form-select"
               onChange={handleChange}
             >
               <option value={"tr"}>{t("tr")}</option>
@@ -87,7 +87,7 @@ function CompanyInfo({ setActivePage, inputs, setInputs, setIsClickable }) {
               name="membership_type"
               value={inputs?.membership_type}
               id="inputState"
-              class="form-select"
+              className="form-select"
               onChange={handleChange}
             >
               <option value={"demo"}>Demo</option>
@@ -96,7 +96,7 @@ function CompanyInfo({ setActivePage, inputs, setInputs, setIsClickable }) {
           </div>
           {inputs?.membership_type === "demo" && (
             <div className="mb-3">
-              <label className="form-label">{t("demo-period")}</label>
+              <label className="form-label">{t("demo-period")} ({t("day")})</label>
               <input
                 name="days"
                 type="number"
