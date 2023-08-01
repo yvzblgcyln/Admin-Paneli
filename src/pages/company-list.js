@@ -12,13 +12,18 @@ import { toast } from "react-toastify";
 import EditModal from "@/components/company-list/EditModal";
 import Head from "next/head";
 import { checkLogin } from "@/actions/LoginActions";
-import { getCloudCompanies } from "@/actions/CloudActions";
+import { getCloudCompanies, getCloudModules } from "@/actions/CloudActions";
+import { capitalize } from "lodash";
+import Loading from "@/components/elements/Loading";
 
-export default function CompanyList({ cloudCompanies }) {
+export default function CompanyList({ cloudCompanies, moduleList, token }) {
+  const [unfilteredList, setUnFilteredList] = useState(cloudCompanies);
   const [filteredList, setFilteredList] = useState(cloudCompanies);
   const [premiumModalOpen, setPremiumModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState(0);
+  const [selectedModules, setSelectedModules] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const pageLimit = 20;
 
@@ -94,7 +99,7 @@ export default function CompanyList({ cloudCompanies }) {
 
   const handleSearch = (e) => {
     setFilteredList(
-      cloudCompanies.filter(({ name }) =>
+      unfilteredList.filter(({ name }) =>
         name.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase())
       )
     );
@@ -105,11 +110,20 @@ export default function CompanyList({ cloudCompanies }) {
     toast.success(t("upgrade-premium"));
   };
 
+  const handleEditModule = async () => {
+    setLoading(true);
+    let newCloudCompanies = await getCloudCompanies(token);
+    setLoading(false);
+    setUnFilteredList(newCloudCompanies);
+    setFilteredList(newCloudCompanies);
+  };
+
   return (
     <>
       <Head>
         <title>{t("company-list")}</title>
       </Head>
+      {loading ? <Loading /> : null}
       <div>
         <WarningModal
           modalOpen={premiumModalOpen}
@@ -117,12 +131,20 @@ export default function CompanyList({ cloudCompanies }) {
           text={t("approve-premium")}
           action={hanlePremiumAction}
         />
-        <EditModal
-          modalOpen={editModalOpen}
-          setModalOpen={setEditModalOpen}
-          action={hanlePremiumAction}
-          data={selectedId}
-        />
+        {selectedModules.length > 0 && selectedId > 0 ? (
+          <EditModal
+            modalOpen={editModalOpen}
+            setModalOpen={setEditModalOpen}
+            action={handleEditModule}
+            data={{
+              id: selectedId,
+              modules: selectedModules,
+            }}
+            moduleList={moduleList}
+            token={token}
+            setLoading={setLoading}
+          />
+        ) : null}
         <Tooltip id="premium" />
         <Tooltip id="edit" />
         <row className="d-flex justify-content-between row-responsive">
@@ -163,7 +185,7 @@ export default function CompanyList({ cloudCompanies }) {
                     </td>
                     <td>{row.email}</td>
                     <td>
-                      {row.membership_type}&nbsp;
+                      {capitalize(row.membership_type)}&nbsp;
                       {row.membership_type.includes("emo") && (
                         <span>
                           ({row.days} {t("days-left")})
@@ -218,7 +240,8 @@ export default function CompanyList({ cloudCompanies }) {
                         data-tooltip-id="edit"
                         data-tooltip-content={t("edit-module")}
                         onClick={() => {
-                          setSelectedId(row);
+                          setSelectedId(row.id);
+                          setSelectedModules(row.cloud_modules);
                           setEditModalOpen(true);
                         }}
                       />
@@ -267,9 +290,12 @@ export async function getServerSideProps({ req }) {
     };
   }
   const cloudCompanies = await getCloudCompanies(token);
+  const moduleList = await getCloudModules(token);
   return {
     props: {
       cloudCompanies,
+      moduleList,
+      token,
     },
   };
 }

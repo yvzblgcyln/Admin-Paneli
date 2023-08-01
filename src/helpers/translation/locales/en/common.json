@@ -73,5 +73,8 @@
   "no-result": "No matching record found.",
   "approve-activate": "Do you confirm that you want to change the user's status?",
   "login-error": "Your username or password is incorrect.",
-  "unexpected-error": "An unexpected error has occurred."
+  "unexpected-error": "An unexpected error has occurred.",
+  "active": "Active",
+  "passive": "Passive",
+  "user-status-changed": "The user status has been successfully changed."
 }

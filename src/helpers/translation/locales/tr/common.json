@@ -61,7 +61,7 @@
   "user-type": "Kullanıcı Tipi",
   "phone": "Telefon",
   "company": "Şirket",
-  "team": "Takım",
+  "team": "Ekip",
   "customer": "Müşteri",
   "status": "Durum",
   "search": "Ara",
@@ -73,5 +73,8 @@
   "no-result": "Aramanıza uygun kayıt bulunamadı.",
   "approve-activate": "Kullanıcı durumunu değiştirmek istediğinize emin misiniz?",
   "login-error": "Kullanıcı adı veya parolanız hatalı.",
-  "unexpected-error": "Beklenmedik bir hata oluştu."
+  "unexpected-error": "Beklenmedik bir hata oluştu.",
+  "active": "Aktif",
+  "passive": "Pasif",
+  "user-status-changed": "Kullanıcı durumu başarıyla değiştirildi."
 }

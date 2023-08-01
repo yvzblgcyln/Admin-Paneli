@@ -1,6 +1,6 @@
 import { Col, Form, Row, Table } from "react-bootstrap";
 import { t } from "i18next";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import SortableTableHead from "@/components/company-list/SortableTableHead";
 import { PaginationControl } from "react-bootstrap-pagination-control";
@@ -10,74 +10,31 @@ import { Tooltip } from "react-tooltip";
 import EditModal from "@/components/company-list/EditModal";
 import WarningModal from "@/components/elements/WarningModal";
 import { checkLogin } from "@/actions/LoginActions";
+import {
+  getCloudCompanyDetails,
+  getCloudModules,
+  changeCloudUserStatus,
+} from "@/actions/CloudActions";
+import i18n from "@/helpers/translation/i18n";
+import { capitalize } from "lodash";
+import Loading from "@/components/elements/Loading";
+import { toast } from "react-toastify";
 
-const rows = [
-  {
-    company: "Fiz Bili\u015fim",
-    customer: "atest",
-    email: "baaa@gmail.com",
-    id: 88,
-    is_active: false,
-    name: "baaa deneme",
-    phone: "123 1345",
-    role: "Kullan\u0131c\u0131",
-    status: "Pasif",
-    team: "Yaz\u0131l\u0131m Geli\u015ftirme",
-    user_type: "initial",
-    user_type_id: 1,
-    user_type_title: "\u015eirket Kullan\u0131c\u0131s\u0131",
-    user_type_title_en: "Company User",
-  },
-  {
-    company: "Fiz Bili\u015fim",
-    customer: "testt",
-    email: "aaa@gmail.com",
-    id: 89,
-    is_active: true,
-    name: "aaa deneme",
-    phone: "4562356",
-    role: "aKullan\u0131c\u0131",
-    status: "Aktif",
-    team: "Yaz\u0131l\u0131m Geli\u015ftirme",
-    user_type: "initial",
-    user_type_id: 1,
-    user_type_title: "\u015eirket Kullan\u0131c\u0131s\u0131",
-    user_type_title_en: "Company User",
-  },
-];
-
-const compInfo = {
-  id: 1,
-  membership_type: "Premium",
-  name: "aTest name",
-  email: "atest@asd.a",
-  related_person_name: "ayavuz",
-  related_person_email: "yazvu@ajlksdk.sas",
-  cloud_modules: [1, 2, 3],
-  language: "en",
-  active_user_count: 15,
-};
-
-const modulList = [
-  { id: 1, name: t("plan-management") },
-  { id: 2, name: t("project-management") },
-  { id: 3, name: t("support-management") },
-  { id: 4, name: t("permit-management") },
-  { id: 5, name: t("performance-management") },
-  { id: 6, name: t("cv-management") },
-  { id: 7, name: t("budget-management") },
-];
-
-function CompanyDetails() {
-  const [filteredList, setFilteredList] = useState(rows);
+function CompanyDetails({ compInfo, moduleList, companyId, token }) {
+  const [unfilteredList, setUnfilteredList] = useState(compInfo.users);
+  const [filteredList, setFilteredList] = useState(compInfo.users);
   const [page, setPage] = useState(1);
   const pageLimit = 20;
   const [modules, setModules] = useState(
-    modulList.filter((item) => compInfo.cloud_modules.includes(item.id))
+    moduleList.filter((item) => compInfo.cloud_modules.includes(item.id))
   );
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState("");
   const [warningModal, setWarningModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedUser, setSelectedUser] = useState({
+    user_id: 0,
+    is_active: null,
+  });
 
   const columns = [
     { name: t("name"), sortable: true, type: "name", integer: false },
@@ -90,6 +47,8 @@ function CompanyDetails() {
     { name: t("customer"), sortable: true, type: "customer", integer: false },
     { name: t("status"), sortable: true, type: "status", integer: false },
   ];
+
+  const [selectedModules, setSelectedModules] = useState([]);
 
   const sortDataBy = (byKey, isInteger, sortDir) => {
     let userData = [...filteredList];
@@ -116,35 +75,67 @@ function CompanyDetails() {
 
   const handleSearch = (e) => {
     setFilteredList(
-      rows.filter(({ name }) =>
+      unfilteredList.filter(({ name }) =>
         name.toLocaleLowerCase().includes(e.target.value.toLocaleLowerCase())
       )
     );
   };
 
-  const handleEditModule = () => {};
+  const handleEditModule = async () => {
+    setLoading(true);
+    let newInfo = await getCloudCompanyDetails(token, companyId);
+    setLoading(false);
+    setModules(
+      moduleList.filter((item) => newInfo.cloud_modules.includes(item.id))
+    );
+  };
 
-  const submitAction = () => {};
+  const handleChangeUserStatus = async () => {
+    setLoading(true);
+    let response = await changeCloudUserStatus(token, selectedUser);
+    setLoading(false);
+    if (response.status === "success") {
+      setLoading(true);
+      let newInfo = await getCloudCompanyDetails(token, companyId);
+      setLoading(false);
+      setUnfilteredList(newInfo.users);
+      setFilteredList(newInfo.users);
+      toast.success(t("user-status-changed"));
+    } else {
+      toast.error(t("unexpected-error"));
+    }
+  };
 
   return (
     <>
       <Head>
         <title>{t("company-info") + ` | ${compInfo.name}`}</title>
       </Head>
+      {loading ? <Loading /> : null}
       <div>
         <Tooltip id="edit" style={{ zIndex: 1 }} />
-        <EditModal
-          modalOpen={editModalOpen}
-          setModalOpen={setEditModalOpen}
-          action={handleEditModule}
-          data={selectedId}
-        />
-        <WarningModal
-          modalOpen={warningModal}
-          setModalOpen={setWarningModal}
-          text={t("approve-activate")}
-          action={submitAction}
-        />
+        {selectedModules.length > 0 ? (
+          <EditModal
+            modalOpen={editModalOpen}
+            setModalOpen={setEditModalOpen}
+            action={handleEditModule}
+            data={{
+              id: compInfo.id,
+              modules: selectedModules,
+            }}
+            moduleList={moduleList}
+            token={token}
+            setLoading={setLoading}
+          />
+        ) : null}
+        {selectedUser.user_id > 0 ? (
+          <WarningModal
+            modalOpen={warningModal}
+            setModalOpen={setWarningModal}
+            text={t("approve-activate")}
+            action={handleChangeUserStatus}
+          />
+        ) : null}
         <h3>{t("company-info")}</h3>
         <div
           style={{
@@ -192,7 +183,15 @@ function CompanyDetails() {
                 <label style={{ transform: "translateY(0)" }}>
                   {t("membership-type")}:{" "}
                 </label>
-                <span> {compInfo.membership_type}</span>
+                <span>
+                  {" "}
+                  {capitalize(compInfo.membership_type)}&nbsp;
+                  {compInfo.membership_type.includes("emo") && (
+                    <span>
+                      ({compInfo.days} {t("days-left")})
+                    </span>
+                  )}
+                </span>
               </div>
             </Col>
             <Col xl={3} lg={4} md={6} className="mb-2">
@@ -261,7 +260,7 @@ function CompanyDetails() {
                   data-tooltip-id="edit"
                   data-tooltip-content={t("edit-module")}
                   onClick={() => {
-                    setSelectedId(1);
+                    setSelectedModules(modules.map((item) => item.id));
                     setEditModalOpen(true);
                   }}
                 />
@@ -309,7 +308,11 @@ function CompanyDetails() {
                     <td>{row.name}</td>
                     <td>{row.email}</td>
                     <td>{row.role}</td>
-                    <td>{row.user_type}</td>
+                    <td>
+                      {i18n.language == "TR"
+                        ? row.user_type_title
+                        : row.user_type_title_en}
+                    </td>
                     <td>{row.phone}</td>
                     <td>{row.company}</td>
                     <td>{row.team}</td>
@@ -320,10 +323,16 @@ function CompanyDetails() {
                         checked={row.is_active}
                         isValid={row.is_active && true}
                         isInvalid={!row.is_active && true}
-                        onClick={() => console.log(setWarningModal(true))}
+                        onClick={() => {
+                          setSelectedUser({
+                            user_id: row.id,
+                            is_active: row.is_active,
+                          });
+                          setWarningModal(true);
+                        }}
                         readOnly
                       />
-                      <span>{row.status}</span>
+                      <span>{row.is_active ? t("active") : t("passive")}</span>
                     </td>
                   </tr>
                 ))}
@@ -348,7 +357,7 @@ function CompanyDetails() {
 
 export default CompanyDetails;
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, params }) {
   const token = req.cookies.token;
   const isLogged = await checkLogin(token);
   if (!isLogged) {
@@ -359,7 +368,23 @@ export async function getServerSideProps({ req }) {
       },
     };
   }
+  const companyId = params.id;
+  const compInfo = await getCloudCompanyDetails(token, companyId);
+  if (!compInfo) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  const moduleList = await getCloudModules(token);
   return {
-    props: {},
+    props: {
+      compInfo,
+      moduleList,
+      companyId,
+      token,
+    },
   };
 }

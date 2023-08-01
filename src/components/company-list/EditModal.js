@@ -1,45 +1,40 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { t } from "i18next";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import WarningModal from "../elements/WarningModal";
+import { editCloudCompanyModules } from "@/actions/CloudActions";
 
-function EditModal({ modalOpen, setModalOpen, action, data }) {
-  const [inputs, setInputs] = useState({ cloud_modules: [1, 2, 6] });
+function EditModal({
+  modalOpen,
+  setModalOpen,
+  action,
+  data,
+  moduleList,
+  token,
+  setLoading,
+}) {
   const [warningModal, setWarningModal] = useState(false);
 
-  //sayfa değişince seçili kutular gelmesi için
-  useEffect(() => {
-    var temp = [...checkOptions];
-    inputs.cloud_modules?.map((id) => (temp[id - 1] = { id: temp[id - 1].id, value: true, name: temp[id - 1].name }));
-    setIsCheckOptions(temp);
-  }, []);
+  const [checkOptions, setCheckOptions] = useState([]);
 
-  const [checkOptions, setIsCheckOptions] = useState([
-    { id: 1, value: false, name: t("plan-management") },
-    { id: 2, value: false, name: t("project-management") },
-    { id: 3, value: false, name: t("support-management") },
-    { id: 4, value: false, name: t("permit-management") },
-    { id: 5, value: false, name: t("performance-management") },
-    { id: 6, value: false, name: t("cv-management") },
-    { id: 7, value: false, name: t("budget-management") },
-  ]);
+  useEffect(() => {
+    setCheckOptions(
+      moduleList.map((item) => ({
+        ...item,
+        value: data.modules.includes(item.id),
+      }))
+    );
+  }, [modalOpen]);
 
   const handleClose = () => setModalOpen(false);
 
   const handleChange = (id) => {
-    //seçilen id kutusu değişir
-    var temp = [...checkOptions];
-    temp.map((data) => {
-      if (data.id === id) temp[id - 1] = { id: data.id, value: !data.value, name: data.name };
-    });
-    setIsCheckOptions(temp);
-
-    // kutu seçildikçe input da değişir
-    var tempIds = [];
-    temp.filter(({ value, id }) => value && tempIds.push(id));
-    setInputs({ ...inputs, cloud_modules: tempIds });
+    let temp = [...checkOptions];
+    let index = temp.findIndex((item) => item.id == id);
+    temp[index]["value"] = !temp[index]["value"];
+    setCheckOptions(temp);
   };
 
   const handleSubmit = (e) => {
@@ -52,11 +47,24 @@ function EditModal({ modalOpen, setModalOpen, action, data }) {
     }
   };
 
-  const submitAction = () => {
-    toast.success(t("succes-edit-module"));
-    console.log(inputs);
-    setWarningModal(false);
-    handleClose();
+  const submitAction = async () => {
+    let body = {
+      cloud_company_id: data.id,
+      cloud_modules: checkOptions
+        .filter((item) => item.value == true)
+        .map((item) => item.id),
+    };
+    setLoading(true);
+    let response = await editCloudCompanyModules(token, body);
+    setLoading(false);
+    if (response.status === "success") {
+      toast.success(t("succes-edit-module"));
+      setWarningModal(false);
+      handleClose();
+      await action();
+    } else {
+      toast.error(t("unexpected-error"));
+    }
   };
 
   return (
@@ -73,7 +81,11 @@ function EditModal({ modalOpen, setModalOpen, action, data }) {
           style={{ gap: 25, padding: "25px 20px 10px 20px" }}
         >
           <h3 style={{ textAlign: "center" }}>{t("module-list")}</h3>
-          <form className="d-flex flex-column" onSubmit={handleSubmit} style={{ width: "100%" }}>
+          <form
+            className="d-flex flex-column"
+            onSubmit={handleSubmit}
+            style={{ width: "100%" }}
+          >
             {checkOptions.map((option) => (
               <div className="form-check form-check-inline" key={option.id}>
                 <input
@@ -84,16 +96,31 @@ function EditModal({ modalOpen, setModalOpen, action, data }) {
                   value={option.id}
                   onChange={() => handleChange(option.id)}
                 />
-                <label className="form-check-label" for={option.id} style={{ transform: "translateY(0)" }}>
+                <label
+                  className="form-check-label"
+                  for={option.id}
+                  style={{ transform: "translateY(0)" }}
+                >
                   {option.name}
                 </label>
               </div>
             ))}
-            <div className="d-flex justify-content-between" style={{ padding: "15px 25px", marginTop: 10 }}>
-              <Button variant="danger" onClick={handleClose} style={{ float: "left" }}>
+            <div
+              className="d-flex justify-content-between"
+              style={{ padding: "15px 25px", marginTop: 10 }}
+            >
+              <Button
+                variant="danger"
+                onClick={handleClose}
+                style={{ float: "left" }}
+              >
                 {t("close")}
               </Button>
-              <Button variant="success" type="submit" style={{ float: "right" }}>
+              <Button
+                variant="success"
+                type="submit"
+                style={{ float: "right" }}
+              >
                 {t("save")}
               </Button>
             </div>

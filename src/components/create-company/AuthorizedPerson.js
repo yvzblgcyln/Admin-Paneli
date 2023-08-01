@@ -1,5 +1,5 @@
 import styles from "@/styles/create-company/Forms.module.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { t } from "i18next";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
